@@ -1,0 +1,15 @@
+# .gitignore
+
+/dist
+/node_modules
+# Ignore build output
+dist/
+out/
+build/
+*.exe
+
+# Ignore dependencies
+node_modules/
+
+# Ignore Electron cache/temp
+*.log

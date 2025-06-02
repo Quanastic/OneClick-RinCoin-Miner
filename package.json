@@ -1,0 +1,16 @@
+{
+  "name": "easy-rincoin-miner",
+  "version": "1.0.0",
+  "description": "One-click Rincoin miner",
+  "main": "main.js",
+  "scripts": {
+  "start": "electron .",
+  "package": "electron-packager . RincoinMiner --platform=win32 --arch=x64 --icon=icon.ico --out=dist --overwrite"
+   },
+
+  "devDependencies": {
+    "electron": "^29.0.0",
+    "electron-packager": "^17.1.2"
+  }
+  
+}
