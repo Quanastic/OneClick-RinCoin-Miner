@@ -27,9 +27,6 @@ window.startMining = (type) => {
   ipcRenderer.send('start-miner', { wallet, type });
 };
 
-window.stopMining = () => {
-  ipcRenderer.send('stop-miner');
-};
 
 ipcRenderer.on('miner-output', (event, message) => {
   const output = document.getElementById('output');

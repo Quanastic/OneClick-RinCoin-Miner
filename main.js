@@ -3,6 +3,7 @@ const { app, BrowserWindow, ipcMain } = require('electron');
 const { spawn } = require('child_process');
 const fs = require('fs');
 const { shell } = require('electron');
+const { autoUpdater } = require('electron-updater');
 
 let minerProcess = null;
 let currentMinerType = null; // 'cpu' or 'srb'
@@ -18,9 +19,26 @@ function createWindow() {
   });
 
   win.loadFile('index.html');
+
+  // Handle external links
+  win.webContents.setWindowOpenHandler(({ url }) => {
+    shell.openExternal(url);
+    return { action: 'deny' };
+  });
+
+  win.webContents.on('will-navigate', (event, url) => {
+    const currentURL = win.webContents.getURL();
+    if (url !== currentURL) {
+      event.preventDefault();
+      shell.openExternal(url);
+    }
+  });
 }
 
-app.whenReady().then(createWindow);
+app.whenReady().then(() => {
+  createWindow();
+  autoUpdater.checkForUpdatesAndNotify();
+});
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') app.quit();
@@ -55,9 +73,13 @@ ipcMain.on('start-miner', (event, { wallet, type }) => {
       });
     }
 
+    minerProcess.on('close', code => {
+      event.reply('miner-output', `\n🛑 Miner exited with code ${code}`);
+      minerProcess = null;
+      currentMinerType = null;
+    });
 
-
-  else if (type === 'srb') {
+  } else if (type === 'srb') {
     const srbDir = path.join(__dirname, 'miner', 'srb-miner');
     const templatePath = path.join(srbDir, 'start-rinhash-template.bat');
     const tempBatPath = path.join(srbDir, 'start-rinhash.bat');
@@ -66,12 +88,11 @@ ipcMain.on('start-miner', (event, { wallet, type }) => {
     batContent = batContent.replace('YOUR_WALLET', wallet);
     fs.writeFileSync(tempBatPath, batContent);
 
-   minerProcess = spawn('cmd.exe', ['/c', 'start', 'start-rinhash.bat'], {
-    cwd: srbDir,
-    windowsHide: false 
-  });
+    minerProcess = spawn('cmd.exe', ['/c', 'start', 'start-rinhash.bat'], {
+      cwd: srbDir,
+      windowsHide: false
+    });
 
-  
     minerProcess.on('close', code => {
       event.reply('miner-output', `\n🛑 SRBMiner exited with code ${code}`);
       minerProcess = null;
@@ -80,42 +101,21 @@ ipcMain.on('start-miner', (event, { wallet, type }) => {
   }
 
   event.reply('miner-output', `⛏️ Starting ${type === 'cpu' ? 'cpuminer-avx' : 'SRBMiner'}...\n`);
-}});
+});
 
 ipcMain.on('stop-miner', event => {
- if (minerProcess && currentMinerType === 'srb') {
-    // Let the user close the SRBMiner window manually
+  if (minerProcess && currentMinerType === 'srb') {
     event.reply('miner-output', '\nℹ️ SRBMiner must be closed manually.');
   } else {
     event.reply('miner-output', '\n⚠️ No miner is running.');
   }
 });
 
-// for opeining links
+// Auto-update listeners (optional: add renderer messaging later)
+autoUpdater.on('update-available', () => {
+  console.log('🔄 Update available.');
+});
 
-function createWindow() {
-  const win = new BrowserWindow({
-    width: 800,
-    height: 800,
-    webPreferences: {
-      nodeIntegration: true,
-      contextIsolation: false
-    }
-  });
-
-  win.loadFile('index.html');
-
-  win.webContents.setWindowOpenHandler(({ url }) => {
-    // Open the URL in the default browser
-    shell.openExternal(url);
-    return { action: 'deny' }; 
-  });
-
-  win.webContents.on('will-navigate', (event, url) => {
-    const currentURL = win.webContents.getURL();
-    if (url !== currentURL) {
-      event.preventDefault();
-      shell.openExternal(url);
-    }
-  });
-}
+autoUpdater.on('update-downloaded', () => {
+  console.log('✅ Update downloaded. Will install on app restart.');
+});

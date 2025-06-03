@@ -1,0 +1,17 @@
+directories:
+  output: release
+  buildResources: build
+appId: com.quanastic.rincoinminer
+productName: RincoinMiner
+files:
+  - filter:
+      - '**/*'
+      - '!node_modules/*/{test,__tests__,examples}'
+      - '!**/node_modules/.cache'
+win:
+  target: nsis
+publish:
+  - provider: github
+    owner: Quanastic
+    repo: OneClick-RinCoin-Miner
+electronVersion: 28.3.3
