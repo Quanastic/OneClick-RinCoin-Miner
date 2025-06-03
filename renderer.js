@@ -14,7 +14,7 @@ window.addEventListener('DOMContentLoaded', () => {
   };
 });
 
-window.startMining = () => {
+window.startMining = (type) => {
   const wallet = document.getElementById('wallet').value.trim();
   const output = document.getElementById('output');
 
@@ -24,8 +24,9 @@ window.startMining = () => {
   }
 
   localStorage.setItem('walletAddress', wallet);
-  ipcRenderer.send('start-miner', wallet);
+  ipcRenderer.send('start-miner', { wallet, type });
 };
+
 
 ipcRenderer.on('miner-output', (event, message) => {
   const output = document.getElementById('output');
@@ -36,5 +37,19 @@ ipcRenderer.on('miner-output', (event, message) => {
 window.clearOutput = () => {
   document.getElementById('output').textContent = '';
 };
+
+
+
+ipcRenderer.on('miner-output', (event, message) => {
+  const output = document.getElementById('output');
+  output.textContent += message;
+  output.scrollTop = output.scrollHeight;
+});
+
+window.clearOutput = () => {
+  document.getElementById('output').textContent = '';
+};
+
+
 
 
