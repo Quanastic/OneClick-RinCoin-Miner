@@ -14,3 +14,4 @@ node_modules/
 
 # Ignore Electron cache/temp
 *.log
+release/
