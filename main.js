@@ -6,7 +6,6 @@ const { shell } = require('electron');
 const { autoUpdater } = require('electron-updater');
 
 let minerProcess = null;
-let currentMinerType = null; // 'cpu' or 'srb'
 
 function createWindow() {
   const win = new BrowserWindow({
@@ -44,46 +43,17 @@ app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') app.quit();
 });
 
-ipcMain.on('start-miner', (event, { wallet, type }) => {
+ipcMain.on('start-miner', (event, { wallet }) => {
   if (minerProcess) {
     event.reply('miner-output', '⚠️ Miner already running.\n');
     return;
   }
 
-  currentMinerType = type;
+  const srbDir = path.join(__dirname, 'miner', 'srb-miner');
+  const templatePath = path.join(srbDir, 'start-rinhash-template.bat');
+  const tempBatPath = path.join(srbDir, 'start-rinhash.bat');
 
-  if (type === 'cpu') {
-    const exePath = path.join(__dirname, 'miner', 'cpu-miner', 'cpuminer.exe');
-    const args = [
-      '-a', 'rinhash',
-      '-o', 'stratum+tcp://rinhash.eu.mine.zergpool.com:7148',
-      '-u', `${wallet}.worker`,
-      '-p', 'x',
-    ];
-
-    minerProcess = spawn(exePath, args, {
-      shell: false,
-      detached: false,
-      windowsHide: true
-    });
-
-    if (minerProcess.stdout) {
-      minerProcess.stdout.on('data', data => {
-        event.reply('miner-output', data.toString());
-      });
-    }
-
-    minerProcess.on('close', code => {
-      event.reply('miner-output', `\n🛑 Miner exited with code ${code}`);
-      minerProcess = null;
-      currentMinerType = null;
-    });
-
-  } else if (type === 'srb') {
-    const srbDir = path.join(__dirname, 'miner', 'srb-miner');
-    const templatePath = path.join(srbDir, 'start-rinhash-template.bat');
-    const tempBatPath = path.join(srbDir, 'start-rinhash.bat');
-
+  try {
     let batContent = fs.readFileSync(templatePath, 'utf-8');
     batContent = batContent.replace('YOUR_WALLET', wallet);
     fs.writeFileSync(tempBatPath, batContent);
@@ -96,22 +66,23 @@ ipcMain.on('start-miner', (event, { wallet, type }) => {
     minerProcess.on('close', code => {
       event.reply('miner-output', `\n🛑 SRBMiner exited with code ${code}`);
       minerProcess = null;
-      currentMinerType = null;
     });
-  }
 
-  event.reply('miner-output', `⛏️ Starting ${type === 'cpu' ? 'cpuminer-avx' : 'SRBMiner'}...\n`);
+    event.reply('miner-output', `⛏️ Starting SRBMiner...\n`);
+  } catch (err) {
+    event.reply('miner-output', `❌ Failed to start miner: ${err.message}\n`);
+  }
 });
 
 ipcMain.on('stop-miner', event => {
-  if (minerProcess && currentMinerType === 'srb') {
+  if (minerProcess) {
     event.reply('miner-output', '\nℹ️ SRBMiner must be closed manually.');
   } else {
     event.reply('miner-output', '\n⚠️ No miner is running.');
   }
 });
 
-// Auto-update listeners (optional: add renderer messaging later)
+// Auto-update listeners
 autoUpdater.on('update-available', () => {
   console.log('🔄 Update available.');
 });

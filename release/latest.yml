@@ -1,8 +1,8 @@
-version: 1.0.0
+version: 1.0.1
 files:
-  - url: RincoinMiner-Setup-1.0.0.exe
-    sha512: or5gLJWBkY3YJcxXypgJ2jYJP5Aj3e62clDGvJm5T7G76o3ZLd+dyjfW7s1VbFIlRQJXQzZ12Y50tuGDRTL77w==
-    size: 103454806
-path: RincoinMiner-Setup-1.0.0.exe
-sha512: or5gLJWBkY3YJcxXypgJ2jYJP5Aj3e62clDGvJm5T7G76o3ZLd+dyjfW7s1VbFIlRQJXQzZ12Y50tuGDRTL77w==
-releaseDate: '2025-06-03T11:07:10.168Z'
+  - url: RincoinMiner-Setup-1.0.1.exe
+    sha512: hmOYOs5tqUtUDDNVD1w/CGcslswHgQBUre2guNh0AVvHAiDm4B44HqcVNgjfYUaQZaKeJv3T4cTgMCgAoz/5vg==
+    size: 103454686
+path: RincoinMiner-Setup-1.0.1.exe
+sha512: hmOYOs5tqUtUDDNVD1w/CGcslswHgQBUre2guNh0AVvHAiDm4B44HqcVNgjfYUaQZaKeJv3T4cTgMCgAoz/5vg==
+releaseDate: '2025-06-03T11:28:43.518Z'
