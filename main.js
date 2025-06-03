@@ -1,4 +1,6 @@
 const path = require('path');
+console.log('SystemRoot:', process.env['SystemRoot']);
+console.log('PATH:', process.env['PATH']);
 const { app, BrowserWindow, ipcMain } = require('electron');
 const { spawn } = require('child_process');
 const fs = require('fs');
@@ -80,28 +82,30 @@ ipcMain.on('start-miner', (event, { wallet, type }) => {
     });
 
   } else if (type === 'srb') {
-    const srbDir = path.join(__dirname, 'miner', 'srb-miner');
-    const templatePath = path.join(srbDir, 'start-rinhash-template.bat');
-    const tempBatPath = path.join(srbDir, 'start-rinhash.bat');
+  const srbDir = path.join(__dirname, 'miner', 'srb-miner');
+  const templatePath = path.join(srbDir, 'start-rinhash-template.bat');
+  const tempBatPath = path.join(srbDir, 'start-rinhash.bat');
 
-    let batContent = fs.readFileSync(templatePath, 'utf-8');
-    batContent = batContent.replace('YOUR_WALLET', wallet);
-    fs.writeFileSync(tempBatPath, batContent);
+  let batContent = fs.readFileSync(templatePath, 'utf-8');
+  batContent = batContent.replace('YOUR_WALLET', wallet);
+  fs.writeFileSync(tempBatPath, batContent);
 
-    minerProcess = spawn('cmd.exe', ['/c', 'start', 'start-rinhash.bat'], {
-      cwd: srbDir,
-      windowsHide: false
-    });
+  // Use full path to cmd.exe for reliability
+  const cmdPath = path.join(process.env['SystemRoot'] || 'C:\\Windows', 'System32', 'cmd.exe');
 
-    minerProcess.on('close', code => {
-      event.reply('miner-output', `\n🛑 SRBMiner exited with code ${code}`);
-      minerProcess = null;
-      currentMinerType = null;
-    });
-  }
-
-  event.reply('miner-output', `⛏️ Starting ${type === 'cpu' ? 'cpuminer-avx' : 'SRBMiner'}...\n`);
+  minerProcess = spawn('start start-rinhash.bat', {
+  cwd: srbDir,
+  shell: true,
+  windowsHide: false
 });
+
+
+  minerProcess.on('close', code => {
+    event.reply('miner-output', `\n🛑 SRBMiner exited with code ${code}`);
+    minerProcess = null;
+    currentMinerType = null;
+  });
+}});
 
 ipcMain.on('stop-miner', event => {
   if (minerProcess && currentMinerType === 'srb') {
