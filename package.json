@@ -1,6 +1,6 @@
 {
   "name": "oneclick-rincoin-miner",
-  "version": "1.0.4",
+  "version": "1.0.2",
   "description": "One-click Rincoin mining app",
   "main": "main.js",
   "scripts": {
