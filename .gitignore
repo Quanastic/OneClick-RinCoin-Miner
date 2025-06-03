@@ -1,17 +1,12 @@
-# .gitignore
+# Ignore dependencies
+node_modules/
 
-/dist
-/node_modules
 # Ignore build output
 dist/
 out/
 build/
-*.exe
 release/
 
-# Ignore dependencies
-node_modules/
-
-# Ignore Electron cache/temp
+# Ignore Electron cache/temp/logs
 *.log
-release/
+*.exe
