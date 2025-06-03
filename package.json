@@ -11,7 +11,7 @@
   "author": "Quanastic",
   "license": "MIT",
   "devDependencies": {
-    "electron": "^28.0.0",
+    "electron": "^28.3.3",
     "electron-builder": "^26.0.12"
   },
   "dependencies": {
