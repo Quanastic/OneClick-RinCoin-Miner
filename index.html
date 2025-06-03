@@ -26,22 +26,13 @@
     <input type="text" id="wallet" placeholder="Enter your Rincoin wallet address" />
 
     <!--Control Buttons-->
-    <button id="startSRB" onclick="startMining('srb')">Start Mining On SRBMiner</button>
-
-    <!--to enable cpuminer-avx removes the comment tags 
-     
-    <button id="startCPU" onclick="startMining('cpu')">Start Mining on cpuminer-avx</button> 
-
-    <button id="stopBtn" onclick="stopMining()">Stop Mining</button>-->
+    <button id="startSRB" onclick="startMining('srb')">Start Mining</button>
     
     <button onclick="clearOutput()">Clear Output</button>
-
     
-
     <!--Output Window-->
 
-    
-
+  
     <pre id="output" style="height: 500px; overflow-y: scroll; background: #000000; color: rgb(5, 162, 219); padding: 10px; border-radius: 5px;"></pre>
     
   </div>
@@ -56,31 +47,29 @@
      <div id="show">
 
   <p id="info">
-    This is made specifically for RinHash <b>"RinCoin"</b>. It uses SRB-Miner to mine RinCoin easily.
+    This is made specifically for RinHash <b>"RinCoin"</b>. It uses SRB-Miner to mine RinCoin.
     <br><br>
     To mine, enter your wallet address and click Start Mining — that's it. To stop the miner close the CMD Window that it opens.
     <br><br>
-    It mines on the Zergpool EU server. To check your mining stats, go to zergpool.com, navigate to the wallet page, and
+    The miner mines on the Zergpool EU server. To check your mining stats, go to zergpool.com, navigate to the wallet page, and
     enter your wallet address there.
     <br><br>
-    For now, you <b>cannot</b> change the server and Rin payouts will follow Zergpool's payout rules.
+    For now, you <b>cannot</b> change the server within the app and Rin payouts will follow Zergpool's payout rules.
     <br><br>
     Please make sure to enter a valid wallet address, otherwise <b>you will not receive your RinCoins.</b>
     <br><br>
     Windows might flag this as a virus. To fix that, disable Windows Defender or follow a tutorial on mining on Windows.
     <br><br>
-    <b>For advanced user</b> you can also mine using cpuminer-opt but you do need to change the index.html code to make that work. You can change the server by editing the .bat file.
-    <br><br>
     <b>You Need A RinCoin Wallet To use This.</b>
     <br><br>
-    If you have any question ask them on discord.
+    If you have any question ask them on Discord.
 
   </p>
 
   <div id="line"></div>
 
   <h2 id="credits">
-   🌐 One-Click-RinCoin Miner App developed by <a href="https://github.com/Quanastic">Quanastic</a>.<br><br>
+   🌐 One-Click-RinCoin Miner developed by <a href="https://github.com/Quanastic">Quanastic</a>.<br><br>
    ⛏️ cpuminer-opt developed by <a href="https://github.com/JayDDee">JayDDee</a> optimized for Rinhash by <a href="https://github.com/ysmreg">ysmreg.</a><br><br>
    ⛏️ SRB-Miner developed by <a href="https://github.com/doktor83">doktor83</a> 
   </h2> <br> <br>

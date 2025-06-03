@@ -55,19 +55,9 @@ ipcMain.on('start-miner', (event, { wallet, type }) => {
       });
     }
 
-    if (minerProcess.stderr) {
-      minerProcess.stderr.on('data', data => {
-        event.reply('miner-output', '❌ ' + data.toString());
-      });
-    }
 
-    minerProcess.on('close', code => {
-      event.reply('miner-output', `\n🛑 cpuminer exited with code ${code}`);
-      minerProcess = null;
-      currentMinerType = null;
-    });
 
-  } else if (type === 'srb') {
+  else if (type === 'srb') {
     const srbDir = path.join(__dirname, 'miner', 'srb-miner');
     const templatePath = path.join(srbDir, 'start-rinhash-template.bat');
     const tempBatPath = path.join(srbDir, 'start-rinhash.bat');
@@ -90,18 +80,10 @@ ipcMain.on('start-miner', (event, { wallet, type }) => {
   }
 
   event.reply('miner-output', `⛏️ Starting ${type === 'cpu' ? 'cpuminer-avx' : 'SRBMiner'}...\n`);
-});
+}});
 
 ipcMain.on('stop-miner', event => {
-  if (minerProcess && currentMinerType === 'cpu') {
-    // Use taskkill for cpuminer
-    const exeName = 'cpuminer.exe';
-    spawn('taskkill', ['/f', '/im', exeName]).on('exit', () => {
-      event.reply('miner-output', '\n🛑 cpuminer has been stopped using taskkill.');
-      minerProcess = null;
-      currentMinerType = null;
-    });
-  } else if (minerProcess && currentMinerType === 'srb') {
+ if (minerProcess && currentMinerType === 'srb') {
     // Let the user close the SRBMiner window manually
     event.reply('miner-output', '\nℹ️ SRBMiner must be closed manually.');
   } else {
@@ -123,11 +105,10 @@ function createWindow() {
 
   win.loadFile('index.html');
 
-  // 🧠 Intercept new-window or navigation attempts
   win.webContents.setWindowOpenHandler(({ url }) => {
     // Open the URL in the default browser
     shell.openExternal(url);
-    return { action: 'deny' }; // Prevent Electron from opening it in a new window
+    return { action: 'deny' }; 
   });
 
   win.webContents.on('will-navigate', (event, url) => {
