@@ -10,6 +10,7 @@ files:
       - '!**/node_modules/.cache'
 win:
   target: nsis
+  icon: favicon.ico
 publish:
   - provider: github
     owner: Quanastic

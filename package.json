@@ -26,7 +26,8 @@
       "!**/node_modules/.cache"
     ],
     "win": {
-      "target": "nsis"
+      "target": "nsis",
+      "icon": "favicon.ico"
     },
     "directories": {
       "output": "release"
