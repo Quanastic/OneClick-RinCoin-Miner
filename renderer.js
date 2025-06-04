@@ -40,16 +40,5 @@ window.clearOutput = () => {
 
 
 
-ipcRenderer.on('miner-output', (event, message) => {
-  const output = document.getElementById('output');
-  output.textContent += message;
-  output.scrollTop = output.scrollHeight;
-});
-
-window.clearOutput = () => {
-  document.getElementById('output').textContent = '';
-};
-
-
 
 

@@ -69,7 +69,7 @@ padding: 0em 1.5em 0em 1.5em ;
 }
 #info{ 
   display: block;
-  line-height: 1.5em;
+  line-height: 1.6em;
   text-align: left;
   font-size: clamp(1em,30vw,1.5em);
 }

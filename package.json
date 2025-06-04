@@ -1,17 +1,17 @@
 {
-  "name": "oneclick-rincoin-miner",
-  "version": "1.0.3",
+  "name": "OneClick-Rincoin-RincoinMiner",
+  "version": "1.0.2",
   "description": "One-click Rincoin mining app",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
     "pack": "electron-builder --dir",
-    "dist": "electron-builder --windows"
+    "dist": "electron-builder"
   },
   "author": "Quanastic",
   "license": "MIT",
   "devDependencies": {
-    "electron": "^28.3.3",
+    "electron": "^28.0.0",
     "electron-builder": "^26.0.12"
   },
   "dependencies": {
@@ -22,12 +22,21 @@
     "productName": "RincoinMiner",
     "files": [
       "**/*",
+      "miner/**/*",
       "!node_modules/*/{test,__tests__,examples}",
       "!**/node_modules/.cache"
     ],
+    "asarUnpack": [
+      "miner/srb-miner/**"
+    ],
+    "extraResources": [
+      {
+        "from": "miner/srb-miner",
+        "to": "miner/srb-miner"
+      }
+    ],
     "win": {
-      "target": "nsis",
-      "icon": "favicon.ico"
+      "target": "nsis"
     },
     "directories": {
       "output": "release"
